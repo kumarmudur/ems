@@ -1,7 +1,7 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { createDepartment } from '../services/departmentService';
+import { createDepartment, getDepartment } from '../services/departmentService';
 
 const Department = () => {
     const [departmentName, setDepartmentName] = useState('');
@@ -12,6 +12,18 @@ const Department = () => {
     const handleDepartmentName = (event) => setDepartmentName(event.target.value);
 
     const handleDepartmentDescription = (event) => setDepartmentDescription(event.target.value);
+
+    useEffect(() => {
+        if (id) {
+            getDepartment(id).then(response => {
+                setDepartmentName(response.data.departmentName);
+                setDepartmentDescription(response.data.departmentDescription);
+            }).catch(error => {
+                console.error(error);
+            });
+        }
+    }, [id]);
+
 
     const saveDepartment = (event) => {
         event.preventDefault();
