@@ -1,5 +1,7 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
 
+import Department from './components/Department';
+import DepartmentList from './components/DepartmentList';
 import EmployeeList from './components/EmployeeList';
 import Employee from './components/Employee';
 import Footer from './components/Footer';
@@ -15,6 +17,9 @@ function App() {
         <Route path='/' element={<EmployeeList />} />
         <Route path='/employees' element={<EmployeeList />} />
         <Route path='/add-employee' element={<Employee />} />
+        <Route path='/edit-employee/:id' element={<Employee />} />
+        <Route path='/departments' element={<DepartmentList />} />
+        <Route path='/add-department' element={<Department />} />
       </Routes>
       <Footer />
     </BrowserRouter>
