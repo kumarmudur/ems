@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { createDepartment, getDepartment } from '../services/departmentService';
+import { createDepartment, getDepartment, updateDepartment } from '../services/departmentService';
 
 const Department = () => {
     const [departmentName, setDepartmentName] = useState('');
@@ -27,14 +27,23 @@ const Department = () => {
 
     const saveDepartment = (event) => {
         event.preventDefault();
-        const department = { departmentName, departmentDescription };
-        console.log('Department', department);
-        createDepartment(department).then(response => {
-            console.log('response', response.data);
-            navigator('/departments');
-        }).catch(error => {
-            console.log('error', error);
-        });
+        const payload = { departmentName, departmentDescription };
+        if (id) {
+            updateDepartment(id, payload).then(response => {
+                console.log('response', response.data);
+                navigator('/departments');
+            }).catch(error => {
+                console.log('error', error);
+            });
+        } else {
+            createDepartment(payload).then(response => {
+                console.log('response', response.data);
+                navigator('/departments');
+            }).catch(error => {
+                console.log('error', error);
+            });
+        }
+       
     }
 
     const pageTitle = () => {
