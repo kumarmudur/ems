@@ -15,7 +15,7 @@ public class DepartmentMapper {
 
     // convert department dto into department jpa entity
     public static Department mapToDepartment(DepartmentDto departmentDto) {
-        return new DepartmentDto(
+        return new Department(
                 departmentDto.getId(),
                 departmentDto.getDepartmentName(),
                 departmentDto.getDepartmentDescription()
