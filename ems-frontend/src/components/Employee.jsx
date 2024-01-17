@@ -1,20 +1,32 @@
 import { useEffect, useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 
-import { createEmployee, getEmployee } from '../services/employeeService';
+import { getAllDepartments } from '../services/departmentService';
+import { createEmployee, getEmployee, updateEmployee } from '../services/employeeService';
 
 const Employee = () => {
     const [firstName, setFirstName] = useState('');
     const [lastName, setLastName] = useState('');
     const [email, setEmail] = useState('');
+    const [departmentId, setDepartmentId] = useState('');
+    const [departments, setDepartments] = useState([]);
     const [errors, setErrors] = useState({
         firstName: '',
         lastName: '',
-        email: ''
+        email: '',
+        department: ''
     });
 
-    const navigation = useNavigate();
+    const navigator = useNavigate();
     const {id} = useParams();
+
+    useEffect(() => {
+        getAllDepartments().then(response => {
+            setDepartments(response.data);
+        }).catch(error => {
+            console.error(error);
+        });
+    }, []);
 
     useEffect(() => {
         if (id) {
@@ -22,6 +34,7 @@ const Employee = () => {
                 setFirstName(response.data.firstName);
                 setLastName(response.data.lastName);
                 setEmail(response.data.email);
+                setDepartmentId(response.data.departmentId);
             }).catch(error => {
                 console.error(error);
             });
@@ -38,11 +51,23 @@ const Employee = () => {
         event.preventDefault();
         console.log(errors);
         if (validateForm()) {
-            const payload = { firstName, lastName, email };
-            createEmployee(payload).then((response) => {
-                console.log(response.data);
-                navigation('/employees');
-            });
+            const payload = { firstName, lastName, email, departmentId };
+            if (id) {
+                updateEmployee(id, payload).then(response => {
+                    console.log(response.data);
+                    navigator('/employees');
+                }).catch(error => { 
+                    console.log(error);
+                });
+            } else {
+                createEmployee(payload).then((response) => {
+                    console.log(response.data);
+                    navigator('/employees');
+                }).catch(error => {
+                    console.log(error);
+                });
+            }
+           
         }
     }
 
@@ -65,6 +90,12 @@ const Employee = () => {
             errorCopy.email = '';
         } else {
             errorCopy.email = 'Email is required';
+            valid = false;
+        }
+        if (departmentId) {
+            errorCopy.department = '';
+        } else {
+            errorCopy.department = 'Select Department';
             valid = false;
         }
         setErrors(errorCopy);
@@ -120,6 +151,23 @@ const Employee = () => {
                                     onChange={handleEmail}
                                 />
                                 { errors.email && <div className="invalid-feedback">{errors.email}</div>}
+                            </div>
+
+                            <div className="form-group mb-2">
+                                <label className="form-label">Select Department:</label>
+                                <select 
+                                    className={`form-control ${errors.department ? 'is-invalid' : '' }`}
+                                    value={departmentId}
+                                    onChange={(event) => setDepartmentId(event.target.value)}
+                                >
+                                    <option value="Select Department">Select Department</option>
+                                    {
+                                        departments.map(department => (
+                                            <option key={department.id} value={department.id}>{department.departmentName}</option>
+                                        ))
+                                    }
+                                </select>
+                                { errors.department && <div className="invalid-feedback">{errors.department}</div>}
                             </div>
                             <button className="btn btn-success" onClick={saveEmployee}>Submit</button>
                         </form>
