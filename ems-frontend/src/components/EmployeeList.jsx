@@ -5,7 +5,7 @@ import { deleteEmployee, getAllEmployees } from '../services/employeeService';
 
 const EmployeeList = () => {
     const [employees, setEmployees] = useState([]);
-    const navigation = useNavigate();
+    const navigator = useNavigate();
 
     useEffect(() => {
         getAllEmployeesData();
@@ -18,11 +18,11 @@ const EmployeeList = () => {
     }
 
     const addNewEmployee = () => {
-        navigation('/add-employee');
+        navigator('/add-employee');
     };
 
     const updateEmployee = id => {
-        navigation(`/edit-employee/${id}`);
+        navigator(`/edit-employee/${id}`);
     }
 
     const removeEmployee = id => {
@@ -62,6 +62,7 @@ const EmployeeList = () => {
                                     <button 
                                        className="btn btn-danger"
                                        onClick={() => removeEmployee(id)}
+                                       style={{marginLeft: '10px'}}
                                     >
                                         Delete
                                     </button>
