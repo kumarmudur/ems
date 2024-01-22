@@ -1,13 +1,13 @@
 import axios from "axios";
 
-const BASE_URL = 'http://localhost:8080/api/employees';
+import { EMPLOYEE_URL } from '../constants/api';
 
-export const getAllEmployees = () => axios.get(BASE_URL);
+export const getAllEmployees = () => axios.get(EMPLOYEE_URL);
 
-export const getEmployee = id => axios.get(`${BASE_URL}/${id}`);
+export const getEmployee = id => axios.get(`${EMPLOYEE_URL}/${id}`);
 
-export const createEmployee = (payload) => axios.post(BASE_URL, payload);
+export const createEmployee = (payload) => axios.post(EMPLOYEE_URL, payload);
 
-export const updateEmployee = (id, payload) => axios.put(`${BASE_URL}/${id}`, payload);
+export const updateEmployee = (id, payload) => axios.put(`${EMPLOYEE_URL}/${id}`, payload);
 
-export const deleteEmployee = id => axios.delete(`${BASE_URL}/${id}`);
+export const deleteEmployee = id => axios.delete(`${EMPLOYEE_URL}/${id}`);
